@@ -6,7 +6,10 @@ import IncomeExpenses from "./components/IncomeExpenses";
 import TransactionsList from "./components/TransactionsList";
 import AddTransaction from "./components/AddTransaction";
 import GlobalProvider from "./contexts/GlobalContext";
+
+
 const App = () => {
+    
     return (
         <GlobalProvider>
             <Header />

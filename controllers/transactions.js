@@ -21,9 +21,9 @@ exports.addTransaction = async (req, res) => {
             const messages = Object.values(error.errors).map(
                 (err) => err.message
             );
-            return res.status(422).json({ error: messages });
+            return res.status(422).json({ error: messages[0] });
         } else {
-            return res.status(500).json({ error: "Internal Server Error" });
+            return res.status(500).json({ error: error.message });
         }
     }
 };

@@ -7,7 +7,6 @@ import {
     GetTransactions,
     TransactionError,
 } from "./actions";
-import axios from "axios";
 
 const INITIAL_STATE = {
     transactions: [],
@@ -19,6 +18,7 @@ const INITIAL_STATE = {
     removeTransaction: () => {},
     addTransaction: () => {},
     getTransactions: () => {},
+    setError:  () => {},
 };
 
 export const GlobalContext = createContext(INITIAL_STATE);
@@ -27,37 +27,13 @@ const GlobalProvider = ({ children }) => {
     const [state, dispatch] = useReducer(AppReducer, INITIAL_STATE);
     const { transactions, balance, income, expense, error, isLoading } = state;
 
-    const removeTransaction = async (id) => {
-        try {
-            await axios.delete(`/api/transactions/${id}`);
-            dispatch(RemoveTransaction(id));
-        } catch (error) {
-            dispatch(TransactionError(error.response.data.error));
-        }
-    };
+    const removeTransaction = (id) =>dispatch(RemoveTransaction(id));
+        
+    const addTransaction =  (transaction) => dispatch(AddTransaction(transaction));
 
-    const addTransaction = async (transaction) => {
-        const config = {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        };
-        try {
-            const res = await axios.post("/api/transactions",transaction,config);
-            dispatch(AddTransaction(res.data.data));
-        } catch (error) {
-            dispatch(TransactionError(error.response.data.error));
-        }
-    };
-
-    const getTransactions = async () => {
-        try {
-            const res = await axios.get("/api/transactions");
-            dispatch(GetTransactions(res.data.data));
-        } catch (error) {
-            dispatch(TransactionError(error.response.data.error));
-        }
-    };
+    const getTransactions =  (transactions) => dispatch(GetTransactions(transactions));
+       
+    const setError = (error) => dispatch(TransactionError(error));
 
     useEffect(() => {
         const newBalance = transactions
@@ -74,7 +50,7 @@ const GlobalProvider = ({ children }) => {
             UpdateValues({
                 balance: +newBalance,
                 expense: +newExpense,
-                income: +newIncome,
+                income: +newIncome,  // + converts string to number
             })
         );
     }, [transactions]);
@@ -91,6 +67,7 @@ const GlobalProvider = ({ children }) => {
                 error,
                 isLoading,
                 getTransactions,
+                setError
             }}
         >
             {children}
