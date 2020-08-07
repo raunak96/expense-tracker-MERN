@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const connectToMongoose = async () => {
     try {
         const conn = await mongoose.connect(
-            `mongodb+srv://rawn_user:${process.env.MONGO_URI}.mongodb.net/expense-tracker?retryWrites=true&w=majority`,
+            process.env.MONGO_URI,
             {
                 useNewUrlParser: true,
                 useFindAndModify: false,

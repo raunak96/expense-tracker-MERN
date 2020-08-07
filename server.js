@@ -39,8 +39,6 @@ if (process.env.NODE_ENV === "production") {
 }
 
 
-
-
 app.listen(PORT, (error) => {
     if (error) throw error;
     console.log(`Server started at ${PORT}`.yellow.bold);
